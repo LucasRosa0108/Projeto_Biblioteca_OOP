@@ -3,27 +3,62 @@ from biblioteca import Biblioteca
 
 biblioteca = Biblioteca()
 
-# Criando e adicionando livros
-livro1 = Livro("Dom Casmurro", "Machado de Assis", 1899, "123456789")
-livro2 = Livro("O Senhor dos Anéis", "J.R.R. Tolkien", 1954, "987654321")
-livro3 = Livro("A Arte da Guerra", "Sun Tzu", -500, "456789123")  # ano negativo para obras antigas
+def menu():
+    print("\n🔧 Menu Biblioteca")
+    print("1. Adicionar livro")
+    print("2. Listar livros")
+    print("3. Buscar livro por título")
+    print("4. Remover livro por ISBN")
+    print("5. Atualizar livro por ISBN")
+    print("6. Sair")
 
-biblioteca.adicionar_livro(livro1)
-biblioteca.adicionar_livro(livro2)
-biblioteca.adicionar_livro(livro3)
+def criar_livro():
+    titulo = input("Título: ")
+    autor = input("Autor: ")
+    ano = int(input("Ano: "))
+    isbn = input("ISBN: ")
+    livro = Livro(titulo, autor, ano, isbn)
+    biblioteca.adicionar_livro(livro)
+    print("✅ Livro adicionado!")
 
-# Listando livros
-print("📚 Lista de Livros:")
-biblioteca.listar_livros()
+def atualizar_livro():
+    isbn = input("ISBN do livro a atualizar: ")
+    encontrado = False
+    for livro in biblioteca.livros:
+        if livro.isbn == isbn:
+            print(f"Livro encontrado: {livro}")
+            novo_titulo = input("Novo título: ")
+            novo_autor = input("Novo autor: ")
+            novo_ano = int(input("Novo ano: "))
+            livro.titulo = novo_titulo
+            livro.autor = novo_autor
+            livro.ano = novo_ano
+            print("✅ Livro atualizado!")
+            encontrado = True
+            break
+    if not encontrado:
+        print("❌ Livro com ISBN não encontrado.")
 
-# Buscando livro
-print("\n🔍 Buscando por 'senhor':")
-biblioteca.buscar_por_titulo("senhor")
+while True:
+    menu()
+    escolha = input("Escolha uma opção: ")
 
-# Removendo livro
-print("\n❌ Removendo livro com ISBN 987654321")
-biblioteca.remover_livro_por_isbn("987654321")
-
-# Lista atualizada
-print("\n📚 Lista atualizada:")
-biblioteca.listar_livros()
+    if escolha == "1":
+        criar_livro()
+    elif escolha == "2":
+        print("\n📚 Lista de Livros:")
+        biblioteca.listar_livros()
+    elif escolha == "3":
+        termo = input("Digite parte do título: ")
+        biblioteca.buscar_por_titulo(termo)
+    elif escolha == "4":
+        isbn = input("ISBN do livro a remover: ")
+        biblioteca.remover_livro_por_isbn(isbn)
+        print("✅ Livro removido (se encontrado).")
+    elif escolha == "5":
+        atualizar_livro()
+    elif escolha == "6":
+        print("📕 Encerrando programa. Até mais!")
+        break
+    else:
+        print("❌ Opção inválida. Tente novamente.")
